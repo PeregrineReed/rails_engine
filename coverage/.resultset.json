@@ -43,6 +43,10 @@
         1,
         null,
         null,
+        1,
+        1,
+        null,
+        null,
         null
       ],
       "/Users/prbalas/turing/3module/projects/rails_engine/app/controllers/application_controller.rb": [
@@ -72,6 +76,6 @@
         0
       ]
     },
-    "timestamp": 1552350222
+    "timestamp": 1552352020
   }
 }
