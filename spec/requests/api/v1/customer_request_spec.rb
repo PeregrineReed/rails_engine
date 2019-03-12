@@ -180,4 +180,43 @@ describe 'Customers API' do
       expect(invoice_ids).to include(invoice["id"])
     end
   end
+
+  xit 'returns all associated transactions' do
+    customer = create(:customer)
+    other_customer = create(:customer)
+    merchant = create(:merchant)
+    invoices = create_list(:invoice, 3, customer: customer)
+    invoice_1_transactions = create_list(:transaction, 3, invoice: invoices[0])
+    invoice_2_transactions = create_list(:transaction, 3, invoice: invoices[1])
+    invoice_3_transactions = create_list(:transaction, 3, invoice: invoices[2])
+    transactions = []
+    transactions << invoice_1_transactions
+    transactions << invoice_2_transactions
+    transactions << invoice_3_transactions
+    transactions.flatten
+    other_invoices = create_list(:invoice, 3, customer: other_customer)
+    other_invoice_transactions = create_list(:transaction, 3, invoice: other_invoices[0])
+
+    get "/api/v1/customers/#{customer.id}/transactions"
+
+    json = JSON.parse(response.body)
+    expect(response).to be_successful
+    expect(json.count).to eq(9)
+    transaction_ids = transactions.map { |i| i.id }
+    json.each do |invoice|
+      expect(transaction_ids).to include(invoice["id"])
+    end
+  end
+
+  it 'returns the favorite merchant for the customer' do
+    customer = create(:customer)
+    merchant_1 = create(:merchant)
+    merchant_2 = create(:merchant)
+
+    invoices = create_list(:invoice, 4)
+    transactions = create_list(:transaction, 8)
+
+    get "/api/v1/customers/#{customer.id}/favorite_merchant"
+  end
+
 end
