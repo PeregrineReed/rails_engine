@@ -1,5 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe Invoice, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+
+  describe 'Relationships' do
+    it { should belong_to :customer }
+  end
+
+  describe 'Validations' do
+  end
+
+  describe 'Class Methods' do
+  end
+
+  describe 'Instance Methods' do
+  end
+
 end
