@@ -162,4 +162,22 @@ describe 'Customers API' do
     first_names = customers.map { |c| c.first_name }
     expect(first_names).to include(json["first_name"])
   end
+
+  it 'returns all associated invoices' do
+    customer = create(:customer)
+    other_customer = create(:customer)
+    merchant = create(:merchant)
+    invoices = create_list(:invoice, 3, customer: customer, merchant: merchant)
+    other_invoices = create_list(:invoice, 3, customer: other_customer, merchant: merchant)
+
+    get "/api/v1/customers/#{customer.id}/invoices"
+
+    json = JSON.parse(response.body)
+    expect(response).to be_successful
+    expect(json.count).to eq(3)
+    invoice_ids = invoices.map { |i| i.id }
+    json.each do |invoice|
+      expect(invoice_ids).to include(invoice["id"])
+    end
+  end
 end
