@@ -65,7 +65,7 @@ describe 'Customers API' do
     json = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(json["created_at"]).to eq(customer.created_at)
+    expect(json["created_at"]).to eq('2012-03-27T14:54:09.000Z')
   end
 
   it 'sends a customer by finding updated at' do
@@ -76,6 +76,78 @@ describe 'Customers API' do
     json = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(json["updated_at"]).to eq(customer.updated_at)
+    expect(json["updated_at"]).to eq('2012-03-27T14:54:09.000Z')
+  end
+
+  it 'sends all customers by finder id' do
+    customers = create_list(:customer, 3)
+
+    get "/api/v1/customers/find_all?id=#{customers[0].id}"
+
+    json = JSON.parse(response.body)
+
+    expect(response).to be_successful
+    expect(json.count).to eq(1)
+    expect(json[0]["id"]).to eq(customers[0].id)
+  end
+
+  it 'sends all customers by finder first name' do
+    bobs = create_list(:customer, 3, first_name: "Bob")
+    customers = create_list(:customer, 3)
+
+    get "/api/v1/customers/find_all?first_name=#{bobs[0].first_name}"
+
+    json = JSON.parse(response.body)
+
+    expect(response).to be_successful
+    expect(json.count).to eq(3)
+    json.each do |customer|
+      expect(customer["first_name"]).to eq("Bob")
+    end
+  end
+
+  it 'sends all customers by finder last name' do
+    smiths = create_list(:customer, 3, last_name: "Smith")
+    customers = create_list(:customer, 3)
+
+    get "/api/v1/customers/find_all?last_name=#{smiths[0].last_name}"
+
+    json = JSON.parse(response.body)
+
+    expect(response).to be_successful
+    expect(json.count).to eq(3)
+    json.each do |customer|
+      expect(customer["last_name"]).to eq("Smith")
+    end
+  end
+
+  it 'sends all customers by finder created at' do
+    customers = create_list(:customer, 3)
+    later_customer = create(:customer, created_at: "2012-03-27 16:54:09 UTC")
+
+    get "/api/v1/customers/find_all?created_at=#{customers[0].created_at}"
+
+    json = JSON.parse(response.body)
+
+    expect(response).to be_successful
+    expect(json.count).to eq(3)
+    json.each do |customer|
+      expect(customer["created_at"]).to eq('2012-03-27T14:54:09.000Z')
+    end
+  end
+
+  it 'sends all customers by finder updated at' do
+    customers = create_list(:customer, 3)
+    later_customer = create(:customer, updated_at: "2012-03-27 16:54:09 UTC")
+
+    get "/api/v1/customers/find_all?updated_at=#{customers[0].updated_at}"
+
+    json = JSON.parse(response.body)
+
+    expect(response).to be_successful
+    expect(json.count).to eq(3)
+    json.each do |customer|
+      expect(customer["created_at"]).to eq('2012-03-27T14:54:09.000Z')
+    end
   end
 end

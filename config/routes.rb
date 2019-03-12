@@ -4,8 +4,10 @@ Rails.application.routes.draw do
       # namespace :customers do
       #   resources :find, only: [:show]
       # end
-      get 'customers/find', to: 'customers/find#show'
-      get 'customers/find_all', to: 'customers/find#index'
+      namespace :customers do
+        get 'find', to: 'find#show'
+        get 'find_all', to: 'find#index'
+      end
       resources :customers, only: [:index, :show]
     end
   end

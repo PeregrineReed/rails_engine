@@ -14,18 +14,18 @@
       <img src="./assets/0.10.2/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" style="display:none;">
-      <div class="timestamp">Generated <abbr class="timeago" title="2019-03-12T08:03:47-06:00">2019-03-12T08:03:47-06:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2019-03-12T11:22:01-06:00">2019-03-12T11:22:01-06:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
         <div class="file_list_container" id="AllFiles">
   <h2>
     <span class="group_name">All Files</span>
-    (<span class="covered_percent"><span class="red">64.29%</span></span>
+    (<span class="covered_percent"><span class="red">66.67%</span></span>
      covered at
      <span class="covered_strength">
-       <span class="red">
-         0.84
+       <span class="green">
+         1.07
        </span>
     </span> hits/line)
   </h2>
@@ -33,8 +33,8 @@
   <div>
     <b>14</b> files in total.
     <b>42</b> relevant lines. 
-    <span class="green"><b>27</b> lines covered</span> and
-    <span class="red"><b>15</b> lines missed </span>
+    <span class="green"><b>28</b> lines covered</span> and
+    <span class="red"><b>14</b> lines missed </span>
   </div>
   <table class="file_list">
     <thead>
@@ -72,12 +72,12 @@
       
       <tr>
         <td class="strong"><a href="#d5370560fd01478643e052222a95c3f1cebe2488" class="src_link" title="app/controllers/api/v1/customers/find_controller.rb">app/controllers/api/v1/customers/find_controller.rb</a></td>
-        <td class="yellow strong">87.5 %</td>
+        <td class="green strong">100.0 %</td>
         <td>17</td>
         <td>8</td>
-        <td>7</td>
-        <td>1</td>
-        <td>1.9</td>
+        <td>8</td>
+        <td>0</td>
+        <td>3.1</td>
       </tr>
       
       <tr>
@@ -199,11 +199,11 @@
           <div class="file_list_container" id="Controllers">
   <h2>
     <span class="group_name">Controllers</span>
-    (<span class="covered_percent"><span class="green">92.86%</span></span>
+    (<span class="covered_percent"><span class="green">100.0%</span></span>
      covered at
      <span class="covered_strength">
        <span class="green">
-         1.51
+         2.2
        </span>
     </span> hits/line)
   </h2>
@@ -211,8 +211,8 @@
   <div>
     <b>3</b> files in total.
     <b>14</b> relevant lines. 
-    <span class="green"><b>13</b> lines covered</span> and
-    <span class="red"><b>1</b> lines missed </span>
+    <span class="green"><b>14</b> lines covered</span> and
+    <span class="red"><b>0</b> lines missed </span>
   </div>
   <table class="file_list">
     <thead>
@@ -230,12 +230,12 @@
       
       <tr>
         <td class="strong"><a href="#d5370560fd01478643e052222a95c3f1cebe2488" class="src_link" title="app/controllers/api/v1/customers/find_controller.rb">app/controllers/api/v1/customers/find_controller.rb</a></td>
-        <td class="yellow strong">87.5 %</td>
+        <td class="green strong">100.0 %</td>
         <td>17</td>
         <td>8</td>
-        <td>7</td>
-        <td>1</td>
-        <td>1.9</td>
+        <td>8</td>
+        <td>0</td>
+        <td>3.1</td>
       </tr>
       
       <tr>
@@ -694,11 +694,11 @@
         <div class="source_table" id="d5370560fd01478643e052222a95c3f1cebe2488">
   <div class="header">
     <h3>app/controllers/api/v1/customers/find_controller.rb</h3>
-    <h4><span class="yellow">87.5 %</span> covered</h4>
+    <h4><span class="green">100.0 %</span> covered</h4>
     <div>
       <b>8</b> relevant lines. 
-      <span class="green"><b>7</b> lines covered</span> and
-      <span class="red"><b>1</b> lines missed.</span>
+      <span class="green"><b>8</b> lines covered</span> and
+      <span class="red"><b>0</b> lines missed.</span>
     </div>
   </div>
   
@@ -747,8 +747,8 @@
           <code class="ruby">  def index</code>
         </li>
       
-        <li class="missed" data-hits="0" data-linenumber="8">
-          
+        <li class="covered" data-hits="5" data-linenumber="8">
+          <span class="hits">5</span>
           
           <code class="ruby">    render json: Customer.where(customer_params)</code>
         </li>
@@ -783,8 +783,8 @@
           <code class="ruby">  def customer_params</code>
         </li>
       
-        <li class="covered" data-hits="5" data-linenumber="14">
-          <span class="hits">5</span>
+        <li class="covered" data-hits="10" data-linenumber="14">
+          <span class="hits">10</span>
           
           <code class="ruby">    params.permit(:id, :first_name, :last_name, :created_at, :updated_at)</code>
         </li>
