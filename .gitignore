@@ -16,9 +16,9 @@
 # Ignore uploaded files in development
 /storage/*
 !/storage/.keep
-coverage/*
 
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+coverage
