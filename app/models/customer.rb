@@ -3,4 +3,10 @@ class Customer < ApplicationRecord
                         :last_name
 
   has_many :invoices
+
+  def transactions
+    Transaction.joins(:invoice)
+              .select('transactions.*, invoices.customer_id')
+               .where('invoices.customer_id = ?', self)
+  end
 end

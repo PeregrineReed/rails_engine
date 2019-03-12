@@ -181,7 +181,7 @@ describe 'Customers API' do
     end
   end
 
-  xit 'returns all associated transactions' do
+  it 'returns all associated transactions' do
     customer = create(:customer)
     other_customer = create(:customer)
     merchant = create(:merchant)
@@ -193,7 +193,7 @@ describe 'Customers API' do
     transactions << invoice_1_transactions
     transactions << invoice_2_transactions
     transactions << invoice_3_transactions
-    transactions.flatten
+    transactions.flatten!
     other_invoices = create_list(:invoice, 3, customer: other_customer)
     other_invoice_transactions = create_list(:transaction, 3, invoice: other_invoices[0])
 
