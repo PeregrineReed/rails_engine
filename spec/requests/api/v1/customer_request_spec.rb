@@ -210,13 +210,25 @@ describe 'Customers API' do
 
   it 'returns the favorite merchant for the customer' do
     customer = create(:customer)
+
     merchant_1 = create(:merchant)
     merchant_2 = create(:merchant)
+    merchant_3 = create(:merchant)
 
-    invoices = create_list(:invoice, 4)
-    transactions = create_list(:transaction, 8)
+    invoices_1 = create_list(:invoice, 3, customer: customer, merchant: merchant_1)
+    invoices_2 = create_list(:invoice, 2, customer: customer, merchant: merchant_2)
+    transaction_1 = create(:transaction, invoice: invoices_1[0])
+    transaction_2 = create(:transaction, invoice: invoices_1[1])
+    transaction_3 = create(:transaction,  invoice: invoices_1[2])
+    transactions_4_5_6 = create_list(:transaction, 3, invoice: invoices_2[0])
+    transactions_5_6_7 = create_list(:transaction, 3, invoice: invoices_2[1])
 
     get "/api/v1/customers/#{customer.id}/favorite_merchant"
+
+    json = JSON.parse(response.body)
+
+    expect(response).to be_successful
+    expect(json["id"]).to eq(merchant_2.id)
   end
 
 end
