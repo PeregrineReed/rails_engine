@@ -3,6 +3,8 @@
     "coverage": {
       "/Users/prbalas/turing/3module/projects/rails_engine/app/models/customer.rb": [
         1,
+        1,
+        1,
         null
       ],
       "/Users/prbalas/turing/3module/projects/rails_engine/app/models/application_record.rb": [
@@ -95,6 +97,6 @@
         0
       ]
     },
-    "timestamp": 1552411321
+    "timestamp": 1552412140
   }
 }
