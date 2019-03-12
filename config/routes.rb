@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       namespace :customers do
         get 'find', to: 'find#show'
         get 'find_all', to: 'find#index'
+        get 'random', to: 'random#show', defaults: { format: 'json' }
       end
       resources :customers, only: [:index, :show]
     end

@@ -150,4 +150,16 @@ describe 'Customers API' do
       expect(customer["created_at"]).to eq('2012-03-27T14:54:09.000Z')
     end
   end
+
+  it 'returns a random resource' do
+    customers = create_list(:customer, 3)
+
+    get "/api/v1/customers/random.json"
+
+    json = JSON.parse(response.body)
+
+    expect(response).to be_successful
+    first_names = customers.map { |c| c.first_name }
+    expect(first_names).to include(json["first_name"])
+  end
 end
