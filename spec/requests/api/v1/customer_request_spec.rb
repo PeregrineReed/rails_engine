@@ -10,7 +10,7 @@ describe 'Customers API' do
 
     items = JSON.parse(response.body)
 
-    expect(items.count).to eq(3)
+    expect(items["data"].count).to eq(3)
   end
 
   it 'sends a single customer by id' do
@@ -21,7 +21,7 @@ describe 'Customers API' do
     customer = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(customer["id"]).to eq(id)
+    expect(customer["data"]["id"]).to eq(id.to_s)
   end
 
   it 'sends a customer by finding id' do
@@ -32,7 +32,7 @@ describe 'Customers API' do
     json = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(json["id"]).to eq(customer.id)
+    expect(json["data"]["id"]).to eq(customer.id.to_s)
   end
 
   it 'sends a customer by finding first name' do
@@ -43,7 +43,7 @@ describe 'Customers API' do
     json = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(json["first_name"]).to eq(customer.first_name)
+    expect(json["data"]["attributes"]["first_name"]).to eq(customer.first_name)
   end
 
   it 'sends a customer by finding last name' do
@@ -54,7 +54,7 @@ describe 'Customers API' do
     json = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(json["last_name"]).to eq(customer.last_name)
+    expect(json["data"]["attributes"]["last_name"]).to eq(customer.last_name)
   end
 
   it 'sends a customer by finding created at' do
@@ -65,7 +65,7 @@ describe 'Customers API' do
     json = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(json["created_at"]).to eq('2012-03-27T14:54:09.000Z')
+    expect(json["data"]["id"]).to eq(customer.id.to_s)
   end
 
   it 'sends a customer by finding updated at' do
@@ -76,7 +76,7 @@ describe 'Customers API' do
     json = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(json["updated_at"]).to eq('2012-03-27T14:54:09.000Z')
+    expect(json["data"]["id"]).to eq(customer.id.to_s)
   end
 
   it 'sends all customers by finder id' do
@@ -88,7 +88,7 @@ describe 'Customers API' do
 
     expect(response).to be_successful
     expect(json.count).to eq(1)
-    expect(json[0]["id"]).to eq(customers[0].id)
+    expect(json["data"][0]["id"]).to eq(customers[0].id.to_s)
   end
 
   it 'sends all customers by finder first name' do
@@ -100,9 +100,9 @@ describe 'Customers API' do
     json = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(json.count).to eq(3)
-    json.each do |customer|
-      expect(customer["first_name"]).to eq("Bob")
+    expect(json["data"].count).to eq(3)
+    json["data"].each do |customer|
+      expect(customer["attributes"]["first_name"]).to eq("Bob")
     end
   end
 
@@ -115,9 +115,9 @@ describe 'Customers API' do
     json = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(json.count).to eq(3)
-    json.each do |customer|
-      expect(customer["last_name"]).to eq("Smith")
+    expect(json["data"].count).to eq(3)
+    json["data"].each do |customer|
+      expect(customer["attributes"]["last_name"]).to eq("Smith")
     end
   end
 
@@ -130,9 +130,11 @@ describe 'Customers API' do
     json = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(json.count).to eq(3)
-    json.each do |customer|
-      expect(customer["created_at"]).to eq('2012-03-27T14:54:09.000Z')
+    expect(json["data"].count).to eq(3)
+
+    customer_ids = customers.map {|c| c.id}
+    json["data"].each do |customer|
+      expect(customer_ids).to include(customer["id"].to_i)
     end
   end
 
@@ -145,9 +147,11 @@ describe 'Customers API' do
     json = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(json.count).to eq(3)
-    json.each do |customer|
-      expect(customer["created_at"]).to eq('2012-03-27T14:54:09.000Z')
+    expect(json["data"].count).to eq(3)
+
+    customer_ids = customers.map {|c| c.id}
+    json["data"].each do |customer|
+      expect(customer_ids).to include(customer["id"].to_i)
     end
   end
 
@@ -160,7 +164,7 @@ describe 'Customers API' do
 
     expect(response).to be_successful
     first_names = customers.map { |c| c.first_name }
-    expect(first_names).to include(json["first_name"])
+    expect(first_names).to include(json["data"]["attributes"]["first_name"])
   end
 
   it 'returns all associated invoices' do
