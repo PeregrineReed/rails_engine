@@ -232,7 +232,7 @@ describe 'Customers API' do
     json = JSON.parse(response.body)
 
     expect(response).to be_successful
-    expect(json["id"]).to eq(merchant_2.id)
+    expect(json["data"]["id"]).to eq(merchant_2.id.to_s)
   end
 
 end
