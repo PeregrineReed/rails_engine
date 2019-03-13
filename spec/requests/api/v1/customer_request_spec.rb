@@ -178,10 +178,10 @@ describe 'Customers API' do
 
     json = JSON.parse(response.body)
     expect(response).to be_successful
-    expect(json.count).to eq(3)
+    expect(json["data"].count).to eq(3)
     invoice_ids = invoices.map { |i| i.id }
-    json.each do |invoice|
-      expect(invoice_ids).to include(invoice["id"])
+    json["data"].each do |invoice|
+      expect(invoice_ids).to include(invoice["id"].to_i)
     end
   end
 
@@ -205,10 +205,10 @@ describe 'Customers API' do
 
     json = JSON.parse(response.body)
     expect(response).to be_successful
-    expect(json.count).to eq(9)
-    transaction_ids = transactions.map { |i| i.id }
-    json.each do |invoice|
-      expect(transaction_ids).to include(invoice["id"])
+    expect(json["data"].count).to eq(9)
+    transaction_ids = transactions.map { |t| t.id }
+    json["data"].each do |transaction|
+      expect(transaction_ids).to include(transaction["id"].to_i)
     end
   end
 
