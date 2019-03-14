@@ -67,6 +67,22 @@ RSpec.describe Merchant, type: :model do
       invoices << create(:invoice, merchant: merchants[3])
       create(:invoice_item, invoice: invoices.last, quantity: 2, unit_price: 5000)
       create(:transaction, result: 'success', invoice: invoices.last)
+
+      three_merchants = Merchant.most_sales(3)
+      two_merchants = Merchant.most_sales(2)
+      one_merchant = Merchant.most_sales(1)
+
+      expect(three_merchants.length).to eq(3)
+      expect(three_merchants[0]).to eq(merchants[2])
+      expect(three_merchants[1]).to eq(merchants[1])
+      expect(three_merchants[2]).to eq(merchants[0])
+
+      expect(two_merchants.length).to eq(2)
+      expect(three_merchants[0]).to eq(merchants[2])
+      expect(three_merchants[1]).to eq(merchants[1])
+
+      expect(one_merchant.length).to eq(1)
+      expect(three_merchants[0]).to eq(merchants[2])
     end
 
     it "::revenue_by_date(date)" do
@@ -87,22 +103,6 @@ RSpec.describe Merchant, type: :model do
       create(:transaction, result: 'success', invoice: invoice_4)
 
       expect(Merchant.revenue_by_date("2012-03-25").revenue).to eq(75000)
-
-      three_merchants = Merchant.most_sales(3)
-      two_merchants = Merchant.most_sales(2)
-      one_merchant = Merchant.most_sales(1)
-
-      expect(three_merchants.length).to eq(3)
-      expect(three_merchants[0]).to eq(merchants[2])
-      expect(three_merchants[1]).to eq(merchants[1])
-      expect(three_merchants[2]).to eq(merchants[0])
-
-      expect(two_merchants.length).to eq(2)
-      expect(three_merchants[0]).to eq(merchants[2])
-      expect(three_merchants[1]).to eq(merchants[1])
-
-      expect(one_merchant.length).to eq(1)
-      expect(three_merchants[0]).to eq(merchants[2])
     end
   end
 

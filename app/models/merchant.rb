@@ -13,6 +13,15 @@ class Merchant < ApplicationRecord
     .limit(limit)
   end
 
+  def self.most_sales(limit)
+    select("merchants.*, COUNT(quantity) AS items_sold")
+    .joins(invoices: [:invoice_items, :transactions])
+    .merge(Transaction.successful)
+    .group(:id)
+    .order("items_sold DESC")
+    .limit(limit)
+  end
+
   def self.revenue_by_date(date)
     select("sum(unit_price*quantity) AS revenue")
     .joins(invoices: [:invoice_items, :transactions])
