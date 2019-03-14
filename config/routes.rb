@@ -8,6 +8,11 @@ Rails.application.routes.draw do
       end
       resources :customers, only: [:index, :show] do
         get 'invoices', to: 'customers/invoices#index'
+        get 'transactions', to: 'customers/transactions#index'
+        get 'favorite_merchant', to: 'customers/favorite_merchant#show'
+      end
+      resources :merchants, only: [:index, :show] do
+        get 'revenue', to: 'merchants/revenue/date#show'
       end
     end
   end
