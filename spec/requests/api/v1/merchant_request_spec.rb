@@ -2,6 +2,50 @@ require 'rails_helper'
 
 RSpec.describe 'Merchants API' do
 
+  it 'returns defined number of merchants ordered by most revenue' do
+    merchants = create_list(:merchant, 4)
+    invoices = []
+
+    counter = 0
+    3.times do
+      invoices << create(:invoice, merchant: merchants[counter])
+      (counter + 1).times do
+        create(:invoice_item, invoice: invoices.last, quantity: 5, unit_price: 2000 * (counter + 1))
+        create(:invoice_item, invoice: invoices.last, quantity: 10, unit_price: 1000 * (counter + 1))
+        create(:transaction, result: 'success', invoice: invoices.last)
+      end
+      counter += 1
+    end
+
+    invoices << create(:invoice, merchant: merchants[3])
+    create(:invoice_item, invoice: invoices.last, quantity: 2, unit_price: 5000)
+    create(:transaction, result: 'success', invoice: invoices.last)
+
+    get '/api/v1/merchants/most_revenue?quantity=3'
+
+    json = JSON.parse(response.body)
+
+    expect(json["data"].length).to eq(3)
+    expect(json["data"][0]["attributes"]["id"].to_i).to eq(merchants[2].id)
+    expect(json["data"][1]["attributes"]["id"].to_i).to eq(merchants[1].id)
+    expect(json["data"][2]["attributes"]["id"].to_i).to eq(merchants[0].id)
+
+    get '/api/v1/merchants/most_revenue?quantity=2'
+
+    json = JSON.parse(response.body)
+
+    expect(json["data"].length).to eq(2)
+    expect(json["data"][0]["attributes"]["id"].to_i).to eq(merchants[2].id)
+    expect(json["data"][1]["attributes"]["id"].to_i).to eq(merchants[1].id)
+
+    get '/api/v1/merchants/most_revenue?quantity=1'
+
+    json = JSON.parse(response.body)
+
+    expect(json["data"].length).to eq(1)
+    expect(json["data"][0]["attributes"]["id"].to_i).to eq(merchants[2].id)
+  end
+
   it 'returns total revenue for all merchants by invoice date' do
 
     merchants = create_list(:merchant, 3)
