@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       namespace :merchants do
         get 'revenue', to: 'revenue/date#index'
         get 'most_revenue', to: 'most_revenue/quantity#index'
+        get 'most_items', to: 'most_items/quantity#index'
       end
       resources :merchants, only: [:index, :show] do
         get 'revenue', to: 'merchants/revenue/date#show'
