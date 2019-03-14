@@ -11,6 +11,9 @@ Rails.application.routes.draw do
         get 'transactions', to: 'customers/transactions#index'
         get 'favorite_merchant', to: 'customers/favorite_merchant#show'
       end
+      namespace :merchants do
+        get 'revenue', to: 'revenue/date#index'
+      end
       resources :merchants, only: [:index, :show] do
         get 'revenue', to: 'merchants/revenue/date#show'
       end

@@ -12,10 +12,29 @@ RSpec.describe Merchant, type: :model do
   end
 
   describe 'Class Methods' do
+    it "::revenue_by_date(date)" do
+      merchant_1 = create(:merchant)
+      merchant_2 = create(:merchant)
+      merchant_3 = create(:merchant)
+      invoice_1 = create(:invoice, merchant: merchant_1, updated_at: "2012-03-25 11:54:29 UTC")
+      create(:invoice_item, invoice: invoice_1, quantity: 5, unit_price: 5000)
+      create(:transaction, result: 'success', invoice: invoice_1)
+      invoice_2 = create(:invoice, merchant: merchant_2, updated_at: "2012-03-25 09:04:09 UTC")
+      create(:invoice_item, invoice: invoice_2, quantity: 5, unit_price: 5000)
+      create(:transaction, result: 'success', invoice: invoice_2)
+      invoice_3 = create(:invoice, merchant: merchant_3, updated_at: "2012-03-25 02:59:19 UTC")
+      create(:invoice_item, invoice: invoice_3, quantity: 5, unit_price: 5000)
+      create(:transaction, result: 'success', invoice: invoice_3)
+      invoice_4 = create(:invoice, merchant: merchant_3, updated_at: "2012-04-25 09:54:09 UTC")
+      create(:invoice_item, invoice: invoice_4, quantity: 5, unit_price: 5000)
+      create(:transaction, result: 'success', invoice: invoice_4)
+
+      expect(Merchant.revenue_by_date("2012-03-25").revenue).to eq(75000)
+    end
   end
 
   describe 'Instance Methods' do
-    it ".revenue_by_date(date)" do
+    it "#revenue_by_date(date)" do
       merchant = create(:merchant)
       invoice = create(:invoice, merchant: merchant, updated_at: "2012-03-25 09:54:09 UTC")
       create(:invoice_item, invoice: invoice, quantity: 5, unit_price: 5000)
