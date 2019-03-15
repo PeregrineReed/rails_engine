@@ -135,5 +135,26 @@ RSpec.describe Merchant, type: :model do
 
       expect(merchant.revenue_by_date("2012-03-25").revenue).to eq(25000)
     end
+
+    it "#favorite_customer" do
+      merchant = create(:merchant)
+
+      customer_1 = create(:customer)
+      customer_2 = create(:customer)
+      customer_3 = create(:customer)
+
+      invoices_1 = create_list(:invoice, 3, customer: customer_1, merchant: merchant)
+      invoices_2 = create_list(:invoice, 2, customer: customer_2, merchant: merchant)
+      transaction_1 = create(:transaction, invoice: invoices_1[0])
+      transaction_2 = create(:transaction, invoice: invoices_1[1])
+      transaction_3 = create(:transaction,  invoice: invoices_1[2])
+      transactions_4_5_6 = create_list(:transaction, 3, invoice: invoices_2[0])
+      transactions_5_6_7 = create_list(:transaction, 3, invoice: invoices_2[1])
+
+      expected = customer_2
+      actual = merchant.favorite_customer
+
+      expect(actual).to eq(expected)
+    end
   end
 end

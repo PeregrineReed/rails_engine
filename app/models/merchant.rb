@@ -41,4 +41,14 @@ class Merchant < ApplicationRecord
     .merge(Transaction.successful)
     .where(updated_at: Date.parse(date).all_day)[0]
   end
+
+  def favorite_customer
+    Customer.joins(invoices: [:merchant, :transactions])
+            .select("customers.*, count(transactions) AS transaction_count")
+            .merge(Transaction.successful)
+            .where(merchants: {id: self.id})
+            .group('customers.id')
+            .order('transaction_count DESC')
+            .first
+  end
 end
