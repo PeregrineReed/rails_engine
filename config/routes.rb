@@ -26,6 +26,10 @@ Rails.application.routes.draw do
         get 'favorite_customer', to: 'merchants/favorite_customer#show'
       end
 
+      #Items
+      namespace :items do
+        get 'most_revenue', to: 'most_revenue/quantity#index'
+      end
     end
   end
 end
