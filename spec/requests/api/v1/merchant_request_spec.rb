@@ -166,4 +166,40 @@ RSpec.describe 'Merchants API' do
 
     expect(json['data']['attributes']['revenue']).to eq('500.00')
   end
+
+  it 'returns favorite customer for a merchant' do
+    merchant = create(:merchant)
+    merchant_2 = create(:merchant)
+    customers = create_list(:customer, 5)
+
+    counter = 1
+    customers.each do |customer|
+      counter.times do
+        invoice = create(:invoice, merchant: merchant, customer: customer)
+        create(:transaction, invoice: invoice)
+      end
+      counter += 1
+    end
+
+    counter = 1
+    customers.reverse.each do |customer|
+      counter.times do
+        invoice = create(:invoice, merchant: merchant_2, customer: customer)
+        create(:transaction, invoice: invoice)
+      end
+      counter += 1
+    end
+
+    get "/api/v1/merchants/#{merchant.id}/favorite_customer"
+
+    json = JSON.parse(response.body)
+
+    expect(json["data"]["attributes"]["id"].to_i).to eq(customers.last.id)
+
+    get "/api/v1/merchants/#{merchant_2.id}/favorite_customer"
+
+    json = JSON.parse(response.body)
+
+    expect(json["data"]["attributes"]["id"].to_i).to eq(customers.first.id)
+  end
 end
