@@ -107,11 +107,31 @@ RSpec.describe Merchant, type: :model do
   end
 
   describe 'Instance Methods' do
+
+    it "#total_revenue" do
+      merchant = create(:merchant)
+      3.times do
+        invoice = create(:invoice, merchant: merchant)
+        create(:invoice_item, invoice: invoice, quantity: 5, unit_price: 5000)
+        create(:transaction, result: 'success', invoice: invoice)
+      end
+      fail = create(:invoice, merchant: merchant)
+      create(:invoice_item, invoice: fail, quantity: 5, unit_price: 5000)
+      create(:transaction, result: 'failed', invoice: fail)
+
+      expect((merchant.total_revenue).total_revenue).to eq(75000)
+    end
+
     it "#revenue_by_date(date)" do
       merchant = create(:merchant)
+
       invoice = create(:invoice, merchant: merchant, updated_at: "2012-03-25 09:54:09 UTC")
       create(:invoice_item, invoice: invoice, quantity: 5, unit_price: 5000)
       create(:transaction, result: 'success', invoice: invoice)
+
+      fail = create(:invoice, merchant: merchant, updated_at: "2012-03-25 09:54:09 UTC")
+      create(:invoice_item, invoice: fail, quantity: 5, unit_price: 5000)
+      create(:transaction, result: 'failed', invoice: fail)
 
       expect(merchant.revenue_by_date("2012-03-25").revenue).to eq(25000)
     end

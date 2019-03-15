@@ -29,6 +29,12 @@ class Merchant < ApplicationRecord
     .where(invoices: {updated_at: Date.parse(date).all_day})[0]
   end
 
+  def total_revenue
+    invoices.select("sum(unit_price*quantity) AS total_revenue")
+    .joins(:invoice_items, :transactions)
+    .merge(Transaction.successful)[0]
+  end
+
   def revenue_by_date(date)
     invoices.select("sum(unit_price*quantity) AS revenue")
     .joins(:invoice_items, :transactions)
