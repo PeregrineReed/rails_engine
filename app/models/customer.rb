@@ -14,7 +14,7 @@ class Customer < ApplicationRecord
     # merchant, sum of transactions from a single customer
     Merchant.joins(invoices: [:customer, :transactions])
             .select("merchants.*, count(transactions) AS transaction_count")
-            .where('transactions.result = 0')
+            .merge(Transaction.successful)
             .where(customers: {id: self.id})
             .group('merchants.id')
             .order('transaction_count DESC')
