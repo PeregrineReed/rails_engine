@@ -12,6 +12,79 @@ RSpec.describe Merchant, type: :model do
   end
 
   describe 'Class Methods' do
+
+    it "::most_revenue(limit)" do
+      merchants = create_list(:merchant, 4)
+      invoices = []
+
+      counter = 0
+      3.times do
+        invoices << create(:invoice, merchant: merchants[counter])
+        (counter + 1).times do
+          create(:invoice_item, invoice: invoices.last, quantity: 5, unit_price: 2000 * (counter + 1))
+          create(:invoice_item, invoice: invoices.last, quantity: 10, unit_price: 1000 * (counter + 1))
+          create(:transaction, result: 'success', invoice: invoices.last)
+        end
+        counter += 1
+      end
+
+      invoices << create(:invoice, merchant: merchants[3])
+      create(:invoice_item, invoice: invoices.last, quantity: 2, unit_price: 5000)
+      create(:transaction, result: 'success', invoice: invoices.last)
+
+      three_merchants = Merchant.most_revenue(3)
+      two_merchants = Merchant.most_revenue(2)
+      one_merchant = Merchant.most_revenue(1)
+
+      expect(three_merchants.length).to eq(3)
+      expect(three_merchants[0]).to eq(merchants[2])
+      expect(three_merchants[1]).to eq(merchants[1])
+      expect(three_merchants[2]).to eq(merchants[0])
+
+      expect(two_merchants.length).to eq(2)
+      expect(three_merchants[0]).to eq(merchants[2])
+      expect(three_merchants[1]).to eq(merchants[1])
+
+      expect(one_merchant.length).to eq(1)
+      expect(three_merchants[0]).to eq(merchants[2])
+    end
+
+    it "::most_sales(limit)" do
+      merchants = create_list(:merchant, 4)
+      invoices = []
+
+      counter = 0
+      3.times do
+        invoices << create(:invoice, merchant: merchants[counter])
+        (counter + 1).times do
+          create(:invoice_item, invoice: invoices.last, quantity: 5 * (counter + 1), unit_price: 2000)
+          create(:invoice_item, invoice: invoices.last, quantity: 10 * (counter + 1), unit_price: 1000)
+          create(:transaction, result: 'success', invoice: invoices.last)
+        end
+        counter += 1
+      end
+
+      invoices << create(:invoice, merchant: merchants[3])
+      create(:invoice_item, invoice: invoices.last, quantity: 2, unit_price: 5000)
+      create(:transaction, result: 'success', invoice: invoices.last)
+
+      three_merchants = Merchant.most_sales(3)
+      two_merchants = Merchant.most_sales(2)
+      one_merchant = Merchant.most_sales(1)
+
+      expect(three_merchants.length).to eq(3)
+      expect(three_merchants[0]).to eq(merchants[2])
+      expect(three_merchants[1]).to eq(merchants[1])
+      expect(three_merchants[2]).to eq(merchants[0])
+
+      expect(two_merchants.length).to eq(2)
+      expect(three_merchants[0]).to eq(merchants[2])
+      expect(three_merchants[1]).to eq(merchants[1])
+
+      expect(one_merchant.length).to eq(1)
+      expect(three_merchants[0]).to eq(merchants[2])
+    end
+
     it "::revenue_by_date(date)" do
       merchant_1 = create(:merchant)
       merchant_2 = create(:merchant)
