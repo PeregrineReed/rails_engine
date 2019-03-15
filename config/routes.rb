@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       resources :merchants, only: [:index, :show] do
         get 'revenue', to: 'merchants/revenue/date#show', constraints: ->(request) { request.query_parameters[:date].present? }
         get 'revenue', to: 'merchants/revenue#show'
+        get 'favorite_customer', to: 'merchants/favorite_customer#show'
       end
 
     end
