@@ -118,6 +118,24 @@ RSpec.describe 'Merchants API' do
     expect(json['data']['attributes']['total_revenue']).to eq('4500.00')
   end
 
+  it 'returns total revenue for a single merchant' do
+    merchant = create(:merchant)
+    3.times do
+      invoice = create(:invoice, merchant: merchant)
+      create(:invoice_item, invoice: invoice, quantity: 5, unit_price: 5000)
+      create(:transaction, result: 'success', invoice: invoice)
+    end
+    fail = create(:invoice, merchant: merchant)
+    create(:invoice_item, invoice: fail, quantity: 5, unit_price: 5000)
+    create(:transaction, result: 'failed', invoice: fail)
+
+    get "/api/v1/merchants/#{merchant.id}/revenue"
+
+    json = JSON.parse(response.body)
+
+    expect(json["data"]["attributes"]["revenue"]).to eq("750.00")
+  end
+
   it 'returns total revenue for a single merchant by invoice date' do
 
     merchant = create(:merchant)
