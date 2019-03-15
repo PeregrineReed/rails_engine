@@ -119,7 +119,7 @@ RSpec.describe Merchant, type: :model do
       create(:invoice_item, invoice: fail, quantity: 5, unit_price: 5000)
       create(:transaction, result: 'failed', invoice: fail)
 
-      expect((merchant.total_revenue).total_revenue).to eq(75000)
+      expect((merchant.total_revenue).revenue).to eq(75000)
     end
 
     it "#revenue_by_date(date)" do
