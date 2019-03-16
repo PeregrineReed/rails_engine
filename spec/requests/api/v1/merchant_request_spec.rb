@@ -115,7 +115,25 @@ RSpec.describe 'Merchants API' do
 
     json = JSON.parse(response.body)
 
-    expect(json['data']['attributes']['revenue']).to eq('4500.00')
+    expect(json['data']['attributes']['total_revenue']).to eq('4500.00')
+  end
+
+  it 'returns total revenue for a single merchant' do
+    merchant = create(:merchant)
+    3.times do
+      invoice = create(:invoice, merchant: merchant)
+      create(:invoice_item, invoice: invoice, quantity: 5, unit_price: 5000)
+      create(:transaction, result: 'success', invoice: invoice)
+    end
+    fail = create(:invoice, merchant: merchant)
+    create(:invoice_item, invoice: fail, quantity: 5, unit_price: 5000)
+    create(:transaction, result: 'failed', invoice: fail)
+
+    get "/api/v1/merchants/#{merchant.id}/revenue"
+
+    json = JSON.parse(response.body)
+
+    expect(json["data"]["attributes"]["revenue"]).to eq("750.00")
   end
 
   it 'returns total revenue for a single merchant by invoice date' do
@@ -147,5 +165,41 @@ RSpec.describe 'Merchants API' do
     json = JSON.parse(response.body)
 
     expect(json['data']['attributes']['revenue']).to eq('500.00')
+  end
+
+  it 'returns favorite customer for a merchant' do
+    merchant = create(:merchant)
+    merchant_2 = create(:merchant)
+    customers = create_list(:customer, 5)
+
+    counter = 1
+    customers.each do |customer|
+      counter.times do
+        invoice = create(:invoice, merchant: merchant, customer: customer)
+        create(:transaction, invoice: invoice)
+      end
+      counter += 1
+    end
+
+    counter = 1
+    customers.reverse.each do |customer|
+      counter.times do
+        invoice = create(:invoice, merchant: merchant_2, customer: customer)
+        create(:transaction, invoice: invoice)
+      end
+      counter += 1
+    end
+
+    get "/api/v1/merchants/#{merchant.id}/favorite_customer"
+
+    json = JSON.parse(response.body)
+
+    expect(json["data"]["attributes"]["id"].to_i).to eq(customers.last.id)
+
+    get "/api/v1/merchants/#{merchant_2.id}/favorite_customer"
+
+    json = JSON.parse(response.body)
+
+    expect(json["data"]["attributes"]["id"].to_i).to eq(customers.first.id)
   end
 end
