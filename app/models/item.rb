@@ -23,4 +23,13 @@ class Item < ApplicationRecord
     .limit(limit)
   end
 
+  def self.best_day(id)
+    select("items.id, CAST(invoices.updated_at AS DATE) as day, SUM(invoice_items.quantity) AS sales")
+    .joins(invoice_items: {invoice: :transactions})
+    .merge(Transaction.successful)
+    .where('items.id = ?', id)
+    .group('invoices.updated_at, items.id')
+    .order('sales DESC, day DESC')[0]
+  end
+
 end
