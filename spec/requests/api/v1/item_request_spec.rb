@@ -73,4 +73,37 @@ RSpec.describe 'Item API' do
     expect(json["data"][0]["attributes"]["id"].to_i).to eq(items[2].id)
   end
 
+  it 'returns best day for sales of and item' do
+    item = create(:item)
+    other_item = create(:item)
+
+    counter = 5
+    counter.times do
+      invoice = create(:invoice, updated_at: "2012-0#{counter}-27 14:54:09 UTC")
+      create(:transaction, invoice: invoice)
+      create(:invoice_item, item: item, invoice: invoice, quantity: 5)
+
+      other_invoice = create(:invoice, updated_at: "2012-0#{counter}-27 14:54:09 UTC")
+      create(:transaction, invoice: other_invoice)
+      create(:invoice_item, item: other_item, invoice: other_invoice, quantity: 5)
+      counter -= 1
+    end
+    invoice = create(:invoice, updated_at: "2012-02-27 14:54:09 UTC")
+    create(:transaction, invoice: invoice)
+    create(:invoice_item, item: item, invoice: invoice, quantity: 5)
+    invoice = create(:invoice, updated_at: "2012-01-27 14:54:09 UTC")
+    create(:transaction, invoice: invoice)
+    create(:invoice_item, item: item, invoice: invoice, quantity: 5)
+
+    other_invoice = create(:invoice, updated_at: "2012-03-27 14:54:09 UTC")
+    create(:transaction, invoice: other_invoice)
+    create(:invoice_item, item: other_item, invoice: other_invoice, quantity: 25)
+
+    get "/api/v1/items/#{item.id}/best_day"
+
+    json = JSON.parse(response.body)
+
+    expect(json["data"]["attributes"]["best_day"]).to eq("2012-02-27")
+  end
+
 end
