@@ -106,6 +106,22 @@ RSpec.describe Item, type: :model do
       expect(result.best_day.to_s).to eq("2012-02-27")
     end
 
+    it '::where_invoice(invoice)' do
+      invoice = create(:invoice)
+      items = create_list(:item, 5)
+      items.each do |item|
+        create(:invoice_item, invoice: invoice, item: item)
+      end
+
+      invoice_2 = create(:invoice)
+      items_2 = create_list(:item, 5)
+      items.each do |item|
+        create(:invoice_item, invoice: invoice_2, item: item)
+      end
+
+      expect(Item.where_invoice(invoice)).to eq(items)
+    end
+
   end
 
   describe 'Instance Methods' do

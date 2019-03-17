@@ -32,4 +32,10 @@ class Item < ApplicationRecord
     .order('sales DESC, best_day DESC')[0]
   end
 
+  def self.where_invoice(invoice)
+    joins(invoice_items: :invoice)
+    .select('items.*, invoice_items.item_id')
+    .where('invoice_items.invoice_id = ?', invoice)
+  end
+
 end
