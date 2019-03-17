@@ -10,7 +10,7 @@ RSpec.describe 'Merchants API' do
     expect(response).to be_successful
 
     json = JSON.parse(response.body)
-
+    
     expect(json["data"].count).to eq(5)
   end
 
@@ -36,7 +36,6 @@ RSpec.describe 'Merchants API' do
     expect(response).to be_successful
 
     json = JSON.parse(response.body)
-    expect(json["data"].length).to eq(1)
     expect(json["data"]["id"]).to eq(merchant.id.to_s)
 
   end
@@ -51,7 +50,6 @@ RSpec.describe 'Merchants API' do
     expect(response).to be_successful
 
     json = JSON.parse(response.body)
-    expect(json["data"].length).to eq(1)
     expect(json["data"]["id"]).to eq(merchant.id.to_s)
 
   end
@@ -66,13 +64,12 @@ RSpec.describe 'Merchants API' do
     expect(response).to be_successful
 
     json = JSON.parse(response.body)
-    expect(json["data"].length).to eq(1)
     expect(json["data"]["id"]).to eq(merchant.id.to_s)
 
   end
 
   it 'can find a single merchant by updated_at' do
-    
+
     merchant = create(:merchant, created_at: "2012-03-27 14:54:09 UTC")
     merchant_2 = create(:merchant, created_at: "2012-03-27 14:54:09 UTC")
 
@@ -81,7 +78,6 @@ RSpec.describe 'Merchants API' do
     expect(response).to be_successful
 
     json = JSON.parse(response.body)
-    expect(json["data"].length).to eq(1)
     expect(json["data"]["id"]).to eq(merchant.id.to_s)
 
   end
@@ -126,7 +122,6 @@ RSpec.describe 'Merchants API' do
 
     json = JSON.parse(response.body)
 
-    expect(json["data"].length).to eq(1)
     expect(json["data"][0]["attributes"]["id"].to_i).to eq(merchants[2].id)
   end
 

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
       # Merchants
       namespace :merchants do
+        get 'find', to: 'find#show'
         get 'revenue', to: 'revenue/date#index'
         get 'most_revenue', to: 'most_revenue/quantity#index'
         get 'most_items', to: 'most_items/quantity#index'
