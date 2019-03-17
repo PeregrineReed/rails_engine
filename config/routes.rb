@@ -24,6 +24,8 @@ Rails.application.routes.draw do
         get 'most_items', to: 'most_items/quantity#index'
       end
       resources :merchants, only: [:index, :show] do
+        get 'items', to: 'merchants/items#index'
+        get 'invoices', to: 'merchants/invoices#index'
         get 'revenue', to: 'merchants/revenue/date#show', constraints: ->(request) { request.query_parameters[:date].present? }
         get 'revenue', to: 'merchants/revenue#show'
         get 'favorite_customer', to: 'merchants/favorite_customer#show'

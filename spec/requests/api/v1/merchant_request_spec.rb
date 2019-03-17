@@ -159,6 +159,44 @@ RSpec.describe 'Merchants API' do
     expect(merchant_ids).to include(json["data"]["attributes"]["id"])
   end
 
+  it 'returns the associated items for a merchant' do
+    merchant = create(:merchant)
+    items = create_list(:item, 5, merchant: merchant)
+
+    merchant_2 = create(:merchant)
+    items_2 = create_list(:item, 5, merchant: merchant_2)
+
+    get "/api/v1/merchants/#{merchant.id}/items"
+
+    expect(response).to be_successful
+    json = JSON.parse(response.body)
+
+    expect(json["data"].length).to eq(5)
+    item_ids = items.map { |i| i.id }
+    json["data"].each do |item|
+      expect(item_ids).to include(item["id"].to_i)
+    end
+  end
+
+  it 'returns the associated invoices for a merchant' do
+    merchant = create(:merchant)
+    invoices = create_list(:invoice, 5, merchant: merchant)
+
+    merchant_2 = create(:merchant)
+    invoices_2 = create_list(:invoice, 5, merchant: merchant_2)
+
+    get "/api/v1/merchants/#{merchant.id}/invoices"
+
+    expect(response).to be_successful
+    json = JSON.parse(response.body)
+
+    expect(json["data"].length).to eq(5)
+    invoice_ids = invoices.map { |i| i.id }
+    json["data"].each do |invoice|
+      expect(invoice_ids).to include(invoice["id"].to_i)
+    end
+  end
+
   it 'returns defined number of merchants ordered by most revenue' do
     merchants = create_list(:merchant, 4)
     invoices = []
