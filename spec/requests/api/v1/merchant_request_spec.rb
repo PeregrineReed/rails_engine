@@ -26,6 +26,66 @@ RSpec.describe 'Merchants API' do
     expect(json["data"]["id"]).to eq(id.to_s)
   end
 
+  it 'can find a single merchant by id' do
+
+    merchant = create(:merchant)
+    merchant_2 = create(:merchant)
+
+    get "/api/v1/merchants/find?id=#{merchant.id}"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+    expect(json["data"].length).to eq(1)
+    expect(json["data"]["id"]).to eq(merchant.id.to_s)
+
+  end
+
+  it 'can find a single merchant by name' do
+
+    merchant = create(:merchant)
+    merchant_2 = create(:merchant)
+
+    get "/api/v1/merchants/find?name=#{merchant.name}"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+    expect(json["data"].length).to eq(1)
+    expect(json["data"]["id"]).to eq(merchant.id.to_s)
+
+  end
+
+  it 'can find a single merchant by created_at' do
+
+    merchant = create(:merchant, created_at: "2012-03-27 14:54:09 UTC")
+    merchant_2 = create(:merchant, created_at: "2012-03-27 14:54:09 UTC")
+
+    get "/api/v1/merchants/find?name=#{merchant.name}"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+    expect(json["data"].length).to eq(1)
+    expect(json["data"]["id"]).to eq(merchant.id.to_s)
+
+  end
+
+  it 'can find a single merchant by updated_at' do
+    
+    merchant = create(:merchant, created_at: "2012-03-27 14:54:09 UTC")
+    merchant_2 = create(:merchant, created_at: "2012-03-27 14:54:09 UTC")
+
+    get "/api/v1/merchants/find?name=#{merchant.name}"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+    expect(json["data"].length).to eq(1)
+    expect(json["data"]["id"]).to eq(merchant.id.to_s)
+
+  end
+
   it 'returns defined number of merchants ordered by most revenue' do
     merchants = create_list(:merchant, 4)
     invoices = []
