@@ -20,12 +20,12 @@ RSpec.describe Item, type: :model do
       counter = 1
       items.each do |item|
         invoice = create(:invoice)
-        create(:transaction, invoice: invoice, result: 'success')
+        create(:transaction, invoice: invoice)
         create(:invoice_item, item: item, invoice: invoice, unit_price: 1000 * counter, quantity: 10)
         counter += 1
       end
       invoice = create(:invoice)
-      create(:transaction, invoice: invoice, result: 'success')
+      create(:transaction, invoice: invoice)
       create(:invoice_item, item: items[2], invoice: invoice, unit_price: 5000 * counter, quantity: 1)
 
       three_items = Item.highest_revenue(3)
@@ -45,17 +45,17 @@ RSpec.describe Item, type: :model do
       expect(one_item[0]).to eq(items[2])
     end
 
-    it '::most_sold' do
+    it '::most_sold(limit)' do
       items = create_list(:item, 5)
       counter = 1
       items.each do |item|
         invoice = create(:invoice)
-        create(:transaction, invoice: invoice, result: 'success')
+        create(:transaction, invoice: invoice)
         create(:invoice_item, item: item, invoice: invoice, unit_price: 1000, quantity: 10 * counter)
         counter += 1
       end
       invoice = create(:invoice)
-      create(:transaction, invoice: invoice, result: 'success')
+      create(:transaction, invoice: invoice)
       create(:invoice_item, item: items[2], invoice: invoice, unit_price: 100, quantity: 25 * counter)
 
       three_items = Item.most_sold(3)
@@ -73,6 +73,37 @@ RSpec.describe Item, type: :model do
 
       expect(one_item.length).to eq(1)
       expect(one_item[0]).to eq(items[2])
+    end
+
+    it '::best_day(item_id)' do
+      item = create(:item)
+      other_item = create(:item)
+
+      counter = 5
+      counter.times do
+        invoice = create(:invoice, updated_at: "2012-0#{counter}-27 14:54:09 UTC")
+        create(:transaction, invoice: invoice)
+        create(:invoice_item, item: item, invoice: invoice, quantity: 5)
+
+        other_invoice = create(:invoice, updated_at: "2012-0#{counter}-27 14:54:09 UTC")
+        create(:transaction, invoice: other_invoice)
+        create(:invoice_item, item: other_item, invoice: other_invoice, quantity: 5)
+        counter -= 1
+      end
+      invoice = create(:invoice, updated_at: "2012-02-27 14:54:09 UTC")
+      create(:transaction, invoice: invoice)
+      create(:invoice_item, item: item, invoice: invoice, quantity: 5)
+      invoice = create(:invoice, updated_at: "2012-01-27 14:54:09 UTC")
+      create(:transaction, invoice: invoice)
+      create(:invoice_item, item: item, invoice: invoice, quantity: 5)
+
+      other_invoice = create(:invoice, updated_at: "2012-03-27 14:54:09 UTC")
+      create(:transaction, invoice: other_invoice)
+      create(:invoice_item, item: other_item, invoice: other_invoice, quantity: 25)
+
+      result = Item.best_day(item.id)
+      expect(result.class).to eq(Item)
+      expect(result.best_day.to_s).to eq("2012-02-27")
     end
 
   end

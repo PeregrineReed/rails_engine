@@ -31,6 +31,9 @@ Rails.application.routes.draw do
         get 'most_revenue', to: 'most_revenue/quantity#index'
         get 'most_items', to: 'most_items/quantity#index'
       end
+      resources :items, only: [:index, :show] do
+        get 'best_day', to: 'items/best_day#show'
+      end
     end
   end
 end
