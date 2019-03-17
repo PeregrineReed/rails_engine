@@ -40,6 +40,7 @@ Rails.application.routes.draw do
         get 'best_day', to: 'items/best_day#show'
       end
 
+      #Invoices
       namespace :invoices do
         get 'find', to: 'search#show'
         get 'find_all', to: 'search#index'
@@ -51,7 +52,17 @@ Rails.application.routes.draw do
         get 'items', to: 'invoices/items#index'
         get 'customer', to: 'invoices/customer#show'
         get 'merchant', to: 'invoices/merchant#show'
+      end
 
+      #Invoice Items
+      namespace :invoice_items do
+        get 'find', to: 'search#show'
+        get 'find_all', to: 'search#index'
+        get 'random', to: 'random#show'
+      end
+      resources :invoice_items, only: [:index, :show] do
+        get 'invoice', to: 'invoice_items/invoice#show'
+        get 'item', to: 'invoice_items/item#show'
       end
     end
   end
