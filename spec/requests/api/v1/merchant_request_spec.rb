@@ -146,6 +146,19 @@ RSpec.describe 'Merchants API' do
     end
   end
 
+  it 'returns a merchant at random' do
+
+    merchants = create_list(:merchant, 5, updated_at: "2012-03-27 14:54:09 UTC")
+
+    get "/api/v1/merchants/random"
+
+    expect(response).to be_successful
+
+    json = JSON.parse(response.body)
+    merchant_ids = merchants.map { |m| m.id }
+    expect(merchant_ids).to include(json["data"]["attributes"]["id"])
+  end
+
   it 'returns defined number of merchants ordered by most revenue' do
     merchants = create_list(:merchant, 4)
     invoices = []
