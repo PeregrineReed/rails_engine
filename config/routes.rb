@@ -4,8 +4,8 @@ Rails.application.routes.draw do
 
       # Customers
       namespace :customers do
-        get 'find', to: 'find#show'
-        get 'find_all', to: 'find#index'
+        get 'find', to: 'search#show'
+        get 'find_all', to: 'search#index'
         get 'random', to: 'random#show'
       end
       resources :customers, only: [:index, :show] do
@@ -16,7 +16,8 @@ Rails.application.routes.draw do
 
       # Merchants
       namespace :merchants do
-        get 'find', to: 'find#show'
+        get 'find', to: 'search#show'
+        get 'find_all', to: 'search#index'
         get 'revenue', to: 'revenue/date#index'
         get 'most_revenue', to: 'most_revenue/quantity#index'
         get 'most_items', to: 'most_items/quantity#index'
