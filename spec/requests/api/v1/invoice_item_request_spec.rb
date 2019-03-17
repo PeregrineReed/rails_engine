@@ -182,7 +182,7 @@ RSpec.describe 'Invoice Items API' do
     json = JSON.parse(response.body)
     expect(json["data"].length).to eq(3)
     json["data"].each do |invoice_item|
-      expect(invoice_item["attributes"]["unit_price"]).to eq(price_10[0].unit_price)
+      expect(invoice_item["attributes"]["unit_price"]).to eq('0.10')
     end
   end
 

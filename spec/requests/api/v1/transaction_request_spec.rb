@@ -62,29 +62,6 @@ RSpec.describe 'Tranaction API' do
     expect(json["data"]["id"]).to eq(transaction.id.to_s)
   end
 
-  it 'can find a single transaction by credit_card_expiration_date' do
-    transaction = create(:transaction, credit_card_expiration_date: "2019-07-31")
-    transaction_2 = create(:transaction)
-
-    get "/api/v1/transactions/find?credit_card_expiration_date=#{transaction.credit_card_expiration_date}"
-
-    expect(response).to be_successful
-
-    json = JSON.parse(response.body)
-    expect(json["data"]["id"]).to eq(transaction.id.to_s)
-  end
-  it 'can find a single transaction by result' do
-    transaction = create(:transaction)
-    transaction_2 = create(:transaction)
-
-    get "/api/v1/transactions/find?result=#{transaction.result}"
-
-    expect(response).to be_successful
-
-    json = JSON.parse(response.body)
-    expect(json["data"]["id"]).to eq(transaction.id.to_s)
-  end
-
   it 'can find a single transaction by created_at' do
     transaction = create(:transaction, created_at: "2012-03-27 14:54:09 UTC")
     transaction_2 = create(:transaction, created_at: "2012-03-27 14:54:09 UTC")
@@ -150,21 +127,6 @@ RSpec.describe 'Tranaction API' do
     expect(json["data"].length).to eq(3)
     json["data"].each do |transaction|
       expect(transaction["attributes"]["credit_card_number"]).to eq(transactions_1[0].credit_card_number)
-    end
-  end
-
-  it 'can find all transactions by credit_card_expiration_date' do
-    credit_card_expiration_date_1 = create_list(:transaction, 3, credit_card_expiration_date: "2012-03-31")
-    credit_card_expiration_date_2 = create_list(:transaction, 3, credit_card_expiration_date: "2020-03-31")
-
-    get "/api/v1/transactions/find_all?credit_card_expiration_date=#{credit_card_expiration_date_1[0].credit_card_expiration_date}"
-
-    expect(response).to be_successful
-
-    json = JSON.parse(response.body)
-    expect(json["data"].length).to eq(3)
-    json["data"].each do |transaction|
-      expect(transaction["attributes"]["credit_card_expiration_date"]).to eq(credit_card_expiration_date_1[0].credit_card_expiration_date)
     end
   end
 

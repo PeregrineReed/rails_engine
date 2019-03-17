@@ -11,6 +11,9 @@ class Api::V1::Items::SearchController < ApplicationController
   private
 
   def item_params
+    if params[:unit_price] && params[:unit_price].include?('.')
+      params[:unit_price] = params[:unit_price].delete!('.')
+    end
     params.permit(:id, :name, :description, :unit_price, :merchant_id, :created_at, :updated_at)
   end
 
