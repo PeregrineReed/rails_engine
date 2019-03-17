@@ -130,17 +130,17 @@ RSpec.describe 'Invoices API' do
   it 'can find all invoices by merchant_id' do
     merchant_1 = create(:merchant)
     merchant_2 = create(:merchant)
-    merchant_1s_id = create_list(:invoice, 3, merchant: merchant_1)
-    merchant_2s_id = create_list(:invoice, 3, merchant: merchant_2)
+    merchant_1_invoices = create_list(:invoice, 3, merchant: merchant_1)
+    merchant_2_invoices = create_list(:invoice, 3, merchant: merchant_2)
 
-    get "/api/v1/invoices/find_all?merchant_id=#{merchant_1s_id[0].merchant_id}"
+    get "/api/v1/invoices/find_all?merchant_id=#{merchant_1_invoices[0].merchant_id}"
 
     expect(response).to be_successful
 
     json = JSON.parse(response.body)
     expect(json["data"].length).to eq(3)
     json["data"].each do |invoice|
-      expect(invoice["attributes"]["merchant_id"].to_i).to eq(merchant_1s_id[0].merchant_id)
+      expect(invoice["attributes"]["merchant_id"].to_i).to eq(merchant_1_invoices[0].merchant_id)
     end
   end
 
@@ -265,7 +265,7 @@ RSpec.describe 'Invoices API' do
       expect(item_ids).to include(item["id"].to_i)
     end
   end
-  
+
   it 'returns the associated customer for a invoice' do
     customer = create(:customer)
     invoice = create(:invoice, customer: customer)

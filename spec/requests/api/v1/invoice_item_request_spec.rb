@@ -62,7 +62,7 @@ RSpec.describe 'Invoice Items API' do
     expect(json["data"]["id"]).to eq(invoice_item.id.to_s)
   end
 
-  it 'can find a single invoice_item by quantity' do
+  it 'can find a single invoice item by quantity' do
     invoice_item = create(:invoice_item, quantity: 5)
     invoice_item_2 = create(:invoice_item)
 
@@ -74,7 +74,7 @@ RSpec.describe 'Invoice Items API' do
     expect(json["data"]["id"]).to eq(invoice_item.id.to_s)
   end
 
-  it 'can find a single invoice_item by unit_price' do
+  it 'can find a single invoice item by unit_price' do
     invoice_item = create(:invoice_item, unit_price: 5)
     invoice_item_2 = create(:invoice_item)
 
@@ -122,7 +122,7 @@ RSpec.describe 'Invoice Items API' do
     expect(json["data"][0]["id"]).to eq(invoice_items[0].id.to_s)
   end
 
-  it 'can find all invoice_items by invoice_id' do
+  it 'can find all invoice items by invoice_id' do
     invoice_1 = create(:invoice)
     invoice_2 = create(:invoice)
     invoice_items_1 = create_list(:invoice_item, 3, invoice: invoice_1)
