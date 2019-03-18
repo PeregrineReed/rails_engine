@@ -19,13 +19,6 @@ class Customer < ApplicationRecord
               AND merchants.id = #{merchant_id}
          GROUP BY customers.id"
        )
-    
-    # Customer.distinct
-    #         .joins(:invoices)
-    #         .joins('LEFT OUTER JOIN transactions ON transactions.invoice_id = invoices.id')
-    #         .where(invoices: {merchant_id: self})
-    #         .group("invoices.id, customers.id")
-    #         .having("COUNT(CASE WHEN transactions.result = 0 THEN 1 ELSE NULL END) = 0")
   end
 
   def transactions
