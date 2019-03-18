@@ -29,6 +29,7 @@ Rails.application.routes.draw do
         get 'revenue', to: 'merchants/revenue/date#show', constraints: ->(request) { request.query_parameters[:date].present? }
         get 'revenue', to: 'merchants/revenue#show'
         get 'favorite_customer', to: 'merchants/favorite_customer#show'
+        get 'customers_with_pending_invoices', to: 'merchants/customers_with_pending_invoices#index'
       end
 
       #Items

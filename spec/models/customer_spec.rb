@@ -12,6 +12,25 @@ RSpec.describe Customer, type: :model do
   end
 
   describe 'Class Methods' do
+
+    it "::with_pending_invoices(merchant_id)" do
+      merchant = create(:merchant)
+      other_merchant = create(:merchant)
+
+      customers = create_list(:customer, 4)
+      customers.each do |customer|
+        invoice = create(:invoice, customer: customer, merchant: merchant)
+        create(:transaction, invoice: invoice)
+        other_invoice = create(:invoice, customer: customer, merchant: other_merchant)
+        create(:transaction, invoice: other_invoice)
+      end
+      customers[2..-1].each do |customer|
+        invoice = create(:invoice, customer: customer, merchant: merchant)
+        create(:transaction, invoice: invoice, result: 'failed')
+      end
+
+      expect(Customer.with_pending_invoices(merchant.id)).to eq(customers[2..-1])
+    end
   end
 
   describe 'Instance Methods' do
