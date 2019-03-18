@@ -8,9 +8,9 @@ describe 'Customers API' do
 
     expect(response).to be_successful
 
-    items = JSON.parse(response.body)
+    json = JSON.parse(response.body)
 
-    expect(items["data"].count).to eq(3)
+    expect(json["data"].count).to eq(3)
   end
 
   it 'sends a single customer by id' do

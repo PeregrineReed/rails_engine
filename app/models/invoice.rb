@@ -7,4 +7,5 @@ class Invoice < ApplicationRecord
   has_many :invoice_items
 
   enum status: [:pending, :shipped]
+  default_scope { order(:id) }
 end

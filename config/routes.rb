@@ -4,8 +4,8 @@ Rails.application.routes.draw do
 
       # Customers
       namespace :customers do
-        get 'find', to: 'find#show'
-        get 'find_all', to: 'find#index'
+        get 'find', to: 'search#show'
+        get 'find_all', to: 'search#index'
         get 'random', to: 'random#show'
       end
       resources :customers, only: [:index, :show] do
@@ -16,11 +16,16 @@ Rails.application.routes.draw do
 
       # Merchants
       namespace :merchants do
+        get 'find', to: 'search#show'
+        get 'find_all', to: 'search#index'
+        get 'random', to: 'random#show'
         get 'revenue', to: 'revenue/date#index'
         get 'most_revenue', to: 'most_revenue/quantity#index'
         get 'most_items', to: 'most_items/quantity#index'
       end
       resources :merchants, only: [:index, :show] do
+        get 'items', to: 'merchants/items#index'
+        get 'invoices', to: 'merchants/invoices#index'
         get 'revenue', to: 'merchants/revenue/date#show', constraints: ->(request) { request.query_parameters[:date].present? }
         get 'revenue', to: 'merchants/revenue#show'
         get 'favorite_customer', to: 'merchants/favorite_customer#show'
@@ -28,11 +33,51 @@ Rails.application.routes.draw do
 
       #Items
       namespace :items do
+        get 'find', to: 'search#show'
+        get 'find_all', to: 'search#index'
+        get 'random', to: 'random#show'
         get 'most_revenue', to: 'most_revenue/quantity#index'
         get 'most_items', to: 'most_items/quantity#index'
       end
       resources :items, only: [:index, :show] do
         get 'best_day', to: 'items/best_day#show'
+        get 'merchant', to: 'items/merchant#show'
+        get 'invoice_items', to: 'items/invoice_items#index'
+      end
+
+      #Invoices
+      namespace :invoices do
+        get 'find', to: 'search#show'
+        get 'find_all', to: 'search#index'
+        get 'random', to: 'random#show'
+      end
+      resources :invoices, only: [:index, :show] do
+        get 'transactions', to: 'invoices/transactions#index'
+        get 'invoice_items', to: 'invoices/invoice_items#index'
+        get 'items', to: 'invoices/items#index'
+        get 'customer', to: 'invoices/customer#show'
+        get 'merchant', to: 'invoices/merchant#show'
+      end
+
+      #Invoice Items
+      namespace :invoice_items do
+        get 'find', to: 'search#show'
+        get 'find_all', to: 'search#index'
+        get 'random', to: 'random#show'
+      end
+      resources :invoice_items, only: [:index, :show] do
+        get 'invoice', to: 'invoice_items/invoice#show'
+        get 'item', to: 'invoice_items/item#show'
+      end
+
+      #Transactions
+      namespace :transactions do
+        get 'find', to: 'search#show'
+        get 'find_all', to: 'search#index'
+        get 'random', to: 'random#show'
+      end
+      resources :transactions, only: [:index, :show] do
+        get 'invoice', to: 'transactions/invoice#show'
       end
     end
   end

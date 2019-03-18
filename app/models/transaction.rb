@@ -6,5 +6,6 @@ class Transaction < ApplicationRecord
 
   enum result: [:success, :failed]
 
+  default_scope { order(:id) }
   scope :successful, -> { where(result: "success") }
 end
