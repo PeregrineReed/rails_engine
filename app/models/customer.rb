@@ -6,6 +6,28 @@ class Customer < ApplicationRecord
 
   default_scope { order(:id) }
 
+  def self.with_pending_invoices(merchant_id)
+    unscoped
+    .find_by_sql(
+      "SELECT customers.*
+         FROM customers
+         JOIN invoices ON invoices.customer_id = customers.id
+         JOIN merchants ON invoices.merchant_id = merchants.id
+         JOIN transactions ON transactions.invoice_id = invoices.id
+         WHERE invoices.status = 1
+              AND transactions.result = 1
+              AND merchants.id = #{merchant_id}
+         GROUP BY customers.id"
+       )
+    
+    # Customer.distinct
+    #         .joins(:invoices)
+    #         .joins('LEFT OUTER JOIN transactions ON transactions.invoice_id = invoices.id')
+    #         .where(invoices: {merchant_id: self})
+    #         .group("invoices.id, customers.id")
+    #         .having("COUNT(CASE WHEN transactions.result = 0 THEN 1 ELSE NULL END) = 0")
+  end
+
   def transactions
     Transaction.unscoped
     .joins(:invoice)

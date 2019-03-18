@@ -396,4 +396,28 @@ RSpec.describe 'Merchants API' do
 
     expect(json["data"]["attributes"]["id"].to_i).to eq(customers.first.id)
   end
+
+  it 'returns customers with pending invoices' do
+    merchant = create(:merchant)
+    other_merchant = create(:merchant)
+
+    customers = create_list(:customer, 4)
+    customers.each do |customer|
+      invoice = create(:invoice, customer: customer, merchant: merchant)
+      create(:transaction, invoice: invoice)
+      other_invoice = create(:invoice, customer: customer, merchant: other_merchant)
+      create(:transaction, invoice: other_invoice)
+    end
+    customers[2..-1].each do |customer|
+      invoice = create(:invoice, customer: customer, merchant: merchant)
+      create(:transaction, invoice: invoice, result: 'failed')
+    end
+
+    get "/api/v1/merchants/#{merchant.id}/customers_with_pending_invoices"
+
+    json = JSON.parse(response.body)
+
+    expect(json["data"][0]["attributes"]["id"].to_i).to eq(customers[2].id)
+    expect(json["data"][1]["attributes"]["id"].to_i).to eq(customers[3].id)
+  end
 end

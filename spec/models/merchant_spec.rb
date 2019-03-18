@@ -104,6 +104,7 @@ RSpec.describe Merchant, type: :model do
 
       expect(Merchant.revenue_by_date("2012-03-25").revenue).to eq(75000)
     end
+
   end
 
   describe 'Instance Methods' do
